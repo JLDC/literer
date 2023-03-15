@@ -2,12 +2,6 @@ import argparse
 import openai
 from scholarly import scholarly
 
-# from scholarly import ProxyGenerator
-
-# # Use proxies to avoid block
-# pg = ProxyGenerator()
-# pg.FreeProxies()
-# scholarly.use_proxy(pg)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Provide number of queries, publications, and topic")
