@@ -9,4 +9,8 @@ setup(
     author_email="jonathan.chassot@unisg.ch",
     url="https://github.com/JLDC/literer",
     keywords=["literature review", "openai", "semantic scholar"],
+    install_requires=[
+        "openai>=0.27.2",
+        "requests>=2.28.2",
+    ]
 )

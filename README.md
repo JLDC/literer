@@ -8,6 +8,9 @@ To install **literer**, clone this repository and install it in pip. Run the fol
 git clone https://github.com/JLDC/literer   # Clone the repository
 cd("literer")                               # Change the directory
 pip install .                               # Install the package with pip
+
+# To uninstall the package again, just use
+# pip uninstall literer
 ```
 
 ## Usage
