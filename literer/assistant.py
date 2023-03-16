@@ -42,7 +42,7 @@ def single_review(publication, tex_format=True):
 
     return get_content(response)
 
-def full_review(publications, tex_format=True):
+def summarize_papers(publications, tex_format=True):
     """
     Generate a full literature review for a set of publications, each with their own brief review.
 
@@ -81,46 +81,3 @@ def full_review(publications, tex_format=True):
     )
 
     return get_content(response)
-
-
-
-
-def get_keywords(topic, nkeywords=3):
-    """
-    Create a list of queries relevant to a given topic.
-
-    Args:
-        - topic (str): The topic to search for.
-        - nkeywords (int, optional): The number of queries to create. Defaults to 3.
-
-    Returns:
-        - list: A list of `nkeywords` queries relevant to the given topic.
-
-    Examples:
-        To create 3 queries relevant to a topic:
-        >>> get_keywords("machine learning")
-        ["machine learning", "deep learning", "neural networks"]
-        
-        To create 5 queries relevant to a topic:
-        >>> get_keywords("computer vision", nkeywords=5)
-        ["object detection", "image segmentation", "optical flow", "convolutional neural networks", "feature extraction"]
-
-    """
-    prompt_system = "You are an assistant creating helpful queries to search relevant papers using the Semantic Scholar API."
-    prompt_user = ''.join(
-        [
-            f"Create exactly '{nkeywords}' query keywords to search for papers relevant to '{topic}'. ",
-            "Separate the search queries by | and do not use any quotes or newlines, e.g. 'query 1 | query 2 | ...'"
-        ]
-    )
-    
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": prompt_system},
-            {"role": "user", "content": prompt_user}
-        ]
-    )
-
-    queries = get_content(response)
-    return [q.strip() for q in queries.split("|")]

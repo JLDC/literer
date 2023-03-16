@@ -4,9 +4,9 @@ literer
 A package that drops literature reviews in public places.
 """
 
-from literer.assistant import get_keywords, full_review, single_review
-from literer.scholar import get_papers
+from literer.assistant import summarize_papers, single_review
+from literer.scholar import get_papers, create_bibliography
 
 __version__ = "0.1.0"
 __author__ = "Jonathan Chassot"
-__all__ = ["get_papers", "get_keywords", "single_review", "full_review"]
+__all__ = ["get_papers", "single_review", "summarize_papers", "create_bibliography"]

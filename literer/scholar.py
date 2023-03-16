@@ -169,6 +169,17 @@ def check_field_of_study_validity(field_of_study):
 def check_publication_type_validity(publication_type):
     if publication_type not in ALL_PUBLICATION_TYPES:
         raise ValueError(f"'{publication_type}' is not a valid publication type.")
-    
+
 def create_bibliography(publications):
+    """
+    Generates a bibliography in BibTeX format from a list of publications.
+
+    Args:
+        - publications (list): A list of dictionaries, where each dictionary represents a publication
+            and has a "bibtex" key with the BibTeX entry for that publication.
+
+    Returns:
+        - str: A string representing the concatenated BibTeX entries of all publications in the list,
+        separated by newline characters.
+    """
     return '\n'.join([p["bibtex"] for p in publications])
