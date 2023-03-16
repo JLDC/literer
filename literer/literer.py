@@ -34,11 +34,12 @@ if __name__ == "__main__":
 
     # Search Semantic Scholar for publications
     print("Querying Semantic Scholar ...")
-    print("-" * 50, end="\n\n")
+    print("-" * 60, end="\n\n")
     publications = scholar.search_by_keyword(args.topic, npubs=args.publications)
 
 
     # Create literature review
     print("Creating literature review (this might take a while) ...")
-    print("-" * 50, end="\n\n")
+    print("-" * 60, end="\n\n")
     print(review.full_review(publications))
+
