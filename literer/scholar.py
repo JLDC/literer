@@ -1,11 +1,10 @@
 import requests
 import warnings
+from .utils import clean_bibtex
 
 # Semantic Scholar API urls
 URL_KEYWORD = "https://api.semanticscholar.org/graph/v1/paper/search?"
 URL_DETAILS = "https://api.semanticscholar.org/graph/v1/paper/"
-
-
 
 def extract_paper_info(data):
     """
@@ -13,11 +12,11 @@ def extract_paper_info(data):
 
     Args:
         - data (dict): A dictionary containing information on a single publication, including its
-            title, authors, year, venue, abstract, citation styles, and tldr.
+            title, authors, year, venue, abstract, and citation styles.
 
     Returns:
-        - dict: A dictionary containing the title, authors, year, venue, abstract, citation styles,
-            and tldr of the publication.
+        - dict: A dictionary containing the title, authors, year, venue, abstract, and 
+            bibtex entry of the publication.
     """
     
     return {
@@ -26,8 +25,7 @@ def extract_paper_info(data):
         "year": data["year"],
         "venue": data["venue"],
         "abstract": data["abstract"],
-        "bibtex": data["citationStyles"]["bibtex"],
-        "summary": data["tldr"]
+        "bibtex": data["citationStyles"]["bibtex"]
     }
 
 
@@ -48,8 +46,7 @@ def get_papers(
 
     Returns:
         - list: A list of dictionaries, where each dictionary contains information on a single publication.
-            The dictionary includes keys for 'title', 'year', 'authors', 'venue', 'abstract',
-            'bibtex', and 'tldr'.
+            The dictionary includes keys for 'title', 'year', 'authors', 'venue', 'abstract', and 'bibtex'.
 
     Examples:
         To search for publications related to machine learning published in 2021:
@@ -111,7 +108,7 @@ def get_papers(
     # Query relevant information for each publication
     for pub in publications["data"]:
         query = f"{URL_DETAILS}{pub['paperId']}"
-        query += "?fields=year,authors,venue,abstract,citationStyles,tldr" 
+        query += "?fields=year,authors,venue,abstract,citationStyles" 
         resp = requests.get(query)
         data = resp.json()
         data["title"] = pub["title"]
@@ -182,4 +179,4 @@ def create_bibliography(publications):
         - str: A string representing the concatenated BibTeX entries of all publications in the list,
         separated by newline characters.
     """
-    return '\n'.join([p["bibtex"] for p in publications])
+    return '\n'.join([clean_bibtex(p["bibtex"]) for p in publications])
