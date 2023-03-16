@@ -49,6 +49,3 @@ lit_review = lit.summarize_papers(papers, tex_format=True)
 # Notes / Ideas
 + Custom ranking by GPT instead of Semantic Scholar?
 + Use GPT to create the keywords (-> actually turned out meh)
-
-# TODOs
-+ Fix bibtex, use regex to transform @None -> @article and stuff like @['JournalArticle']
