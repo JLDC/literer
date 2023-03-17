@@ -31,7 +31,7 @@ def extract_paper_info(data):
 
 def get_papers(
         keyword, npubs=30, year_start=None, year_end=None, venue=None,
-        fields_of_study=None, publication_types=None):
+        fields_of_study=None, publication_types=None, api_key=None):
     """
     Search for publications on Semantic Scholar using a keyword and optional filters.
 
@@ -43,6 +43,7 @@ def get_papers(
         - venue (str or list): The venue(s) where the publications were published.
         - fields_of_study (str or list): The field(s) of study related to the publications.
         - publication_types (str or list): The type(s) of publications to retrieve.
+        - api_key (str): Semantic scholar API key
 
     Returns:
         - list: A list of dictionaries, where each dictionary contains information on a single publication.
@@ -55,10 +56,15 @@ def get_papers(
     
     if npubs > 100:
         warnings.warn("The free API for Semantic Scholar cannot do more than " +
-                      f"100 requests every 5 minutes. " +
-                      f"Consider reducing 'npubs' (currently 'npubs' = {npubs}).")
+                      f"100 requests at once, npubs has been set to 100.")
+        npubs = 100
     
     query = f"{URL_KEYWORD}query={keyword.replace(' ', '+')}&limit={npubs}"
+    # Set API key if we have it
+    if len(api_key):
+        headers = {"x-api-key": api_key}
+    else:
+        headers = None
 
     # Restrict results to a given year range
     if year_start is None:
@@ -103,7 +109,8 @@ def get_papers(
         else:
             raise TypeError("'publication_types' must be a list or str")
         
-    response = requests.get(query)
+    response = requests.get(query, headers=headers)
+    warn_error(response)
     publications = response.json()
     pub_list = []
     
@@ -111,7 +118,8 @@ def get_papers(
     for pub in publications["data"]:
         query = f"{URL_DETAILS}{pub['paperId']}"
         query += "?fields=year,authors,venue,abstract,citationStyles" 
-        resp = requests.get(query)
+        resp = requests.get(query, headers=headers)
+        warn_error(resp)
         data = resp.json()
         data["title"] = pub["title"]
         pub_list.append(extract_paper_info(data))
@@ -182,3 +190,7 @@ def create_bibliography(publications):
         separated by newline characters.
     """
     return '\n'.join([clean_bibtex(p["bibtex"]) for p in publications])
+
+def warn_error(response):
+    if response.status_code != 200:
+        warnings.warn(f"Semantic Scholar error encountered: \n\t{response.json()['error']}")
