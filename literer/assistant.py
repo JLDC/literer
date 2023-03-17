@@ -38,7 +38,7 @@ def single_review(publication, topic, tex_format=True, model="gpt-4-0314"):
 
     return get_content(response)
 
-def summarize_papers(publications, topic, tex_format=True, model="gpt-4-0314"):
+def summarize_papers(publications, topic, tex_format=False, model="gpt-4-0314"):
     """
     Generate a full literature review for a set of publications, each with their own brief review.
 
@@ -68,13 +68,14 @@ def summarize_papers(publications, topic, tex_format=True, model="gpt-4-0314"):
         {
         "role": "user",
         "content": ("Combine the following reviews into a single literature "
-                    f"review that focuses on the topic of '{topic}'")
+                    f"review that focuses on the topic of '{topic}'. "
+                    "Ensure that the reader understands why these papers are "
+                    "relevant to the paper you are writing.\n"
+                    '\n'.join(single_reviews))
         }
     ]
-
-    prompt_user = f"Combine the following reviews for your literature review: \n\n{single_reviews}"
     response = openai.ChatCompletion.create(
-        model=model
+        model=model,
         messages=messages
     )
 
@@ -127,6 +128,9 @@ def judge_paper(publication, topic, target_journal, model="gpt-4-0314"):
         journal_str = f"one of the following journals: {target_journal}"
     else:
         raise TypeError("'target_journal' must be either a str or list")
+    
+    if publication["abstract"] == "":
+        return 0, "No abstract."
     
     messages = [
         {
