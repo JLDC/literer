@@ -20,12 +20,15 @@ After installation you can import the **literer** package and start using it.
 import literer as lit
 import openai
 
-# Begin by setting API key
-openai.api_key = "YOUR_API_KEY_HERE"
+# Begin by setting OpenAI API key
+openai.api_key = "YOUR_OPENAI_API_KEY_HERE"
+# Optional: If you have one, you can also use your Semantic Scholar API key
+s2_api_key = "YOUR_S2_API_KEY_HERE"
 
 # Get npubs=15 papers using a specific search keyword, one can also provide further
 # filters, e.g., field of study, venue, or publication type (see docstring)
-papers = lit.get_papers("deep learning for financial forecasting", npubs=15)
+papers = lit.get_papers("deep learning for financial forecasting", npubs=15,
+    api_key=s2_api_key) # Leave api_key empty if you don't have one.
 
 # Extract the BibTeX entries and save them to a bibliography.bib file
 with open("bibiliography.bib", "w") as f:
