@@ -100,6 +100,8 @@ def get_papers(
             # Make sure publication types are valid
             map(check_publication_type_validity, publication_types)
             query += f"&publicationType={','.join(publication_types)}"
+        else:
+            raise TypeError("'publication_types' must be a list or str")
         
     response = requests.get(query)
     publications = response.json()
