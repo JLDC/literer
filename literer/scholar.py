@@ -61,7 +61,7 @@ def get_papers(
     
     query = f"{URL_KEYWORD}query={keyword.replace(' ', '+')}&limit={npubs}"
     # Set API key if we have it
-    if len(api_key):
+    if api_key is not None:
         headers = {"x-api-key": api_key}
     else:
         headers = None
@@ -194,3 +194,42 @@ def create_bibliography(publications):
 def warn_error(response):
     if response.status_code != 200:
         warnings.warn(f"Semantic Scholar error encountered: \n\t{response.json()['error']}")
+
+def get_top_journals(field, top5=True):
+    if field not in TOP_JOURNALS:
+        raise KeyError("Top journals for this field have not been compiled yet.")
+    if top5:
+        return TOP_JOURNALS[field][:5]
+    else:
+        return TOP_JOURNALS[field]
+
+# Top 5 are top 5, rest is simply good
+TOP_JOURNALS = {
+    "Economics": [
+        "American Economic Review",
+        "Econometrica",
+        "Journal of Political Economy",
+        "Quarterly Journal of Economics",
+        "Review of Economic Studies",
+        
+        "Economic Journal",
+        "European Economic Review",
+        "Journal of the European Economic Association",
+        "Review of Economic Studies",
+        "Review of Economics and Statistics",
+        "Annual Review of Economics",
+        "Journal of Economic Literature",
+        "Journal of Economic Perspectives",
+    ],
+
+    "Finance": [
+        "Journal of Finance",
+        "Journal of Financial Economics",
+        "Review of Financial Studies",
+        "Journal of Financial and Quantitative Analysis",
+        "Journal of Accounting and Economics",
+
+        "Journal of Banking and Finance",
+        "Quantitative Finance"
+    ]
+}
