@@ -57,6 +57,8 @@ def summarize_papers(publications, topic, tex_format=False, model="gpt-4-0314"):
     Returns:
         A string containing the full literature review.
     """
+    # Drop any paper that do not have an abstract first
+    publications = [p for p in publications if p["abstract"] != ""]
     single_reviews = [single_review(pub, topic, tex_format) for pub in publications]
 
     messages = [
@@ -106,6 +108,7 @@ def get_keywords(topic, n_keywords, model="gpt-4-0314"):
         "role": "user", 
         "content": (f"Provide {n_keywords} queries to search for literature "
                     f"relevant to the topic of '{topic}' on Semantic Scholar. "
+                    "Be aware that longer keywords will make it more difficult to find results. "
                     "Separate the search queries by '|', such that they are "
                     "easily parsable.")
         }
@@ -129,7 +132,7 @@ def judge_paper(publication, topic, target_journal, model="gpt-4-0314"):
     else:
         raise TypeError("'target_journal' must be either a str or list")
     
-    if publication["abstract"] == "":
+    if publication["abstract"] == "" or publication["abstract"] is None:
         return 0, "No abstract."
     
     messages = [
@@ -142,7 +145,8 @@ def judge_paper(publication, topic, target_journal, model="gpt-4-0314"):
         "role": "user",
         "content": (f"You are writing a paper on the topic of {topic} and are "
                     f"aiming to publish to {journal_str}.\n"
-                    f"Is the following paper, published in the journal '{publication['venue']}' relevant to you?\n"
+                    "Is the following paper, published in the journal "
+                    f"'{publication['venue']}' relevant to you?\n"
                     f"Abstract: {publication['abstract']}.\n"
                     "Give your answer in format RELEVANCE_SCORE|JUSTIFICATION " 
                     "where RELEVANCE_SCORE is an integer between 0 and 10 "

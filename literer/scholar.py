@@ -25,7 +25,8 @@ def extract_paper_info(data):
         "year": data["year"],
         "venue": data["venue"],
         "abstract": data["abstract"],
-        "bibtex": data["citationStyles"]["bibtex"]
+        "bibtex": data["citationStyles"]["bibtex"],
+        "url": data["url"]
     }
 
 
@@ -113,11 +114,14 @@ def get_papers(
     warn_error(response)
     publications = response.json()
     pub_list = []
-    
+
+    # Special case when there are no publications found.
+    if publications["total"] == 0:
+        return pub_list
     # Query relevant information for each publication
     for pub in publications["data"]:
         query = f"{URL_DETAILS}{pub['paperId']}"
-        query += "?fields=year,authors,venue,abstract,citationStyles" 
+        query += "?fields=year,authors,venue,abstract,citationStyles,url" 
         resp = requests.get(query, headers=headers)
         warn_error(resp)
         data = resp.json()
