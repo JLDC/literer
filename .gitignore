@@ -130,4 +130,6 @@ dmypy.json
 
 
 api_key
+s2_api_key
 literer/playground.py
+notes.md

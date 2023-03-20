@@ -1,4 +1,5 @@
 import requests
+from typing import List
 import warnings
 from .utils import clean_bibtex
 
@@ -25,19 +26,20 @@ def extract_paper_info(data):
         "year": data["year"],
         "venue": data["venue"],
         "abstract": data["abstract"],
-        "bibtex": data["citationStyles"]["bibtex"]
+        "bibtex": data["citationStyles"]["bibtex"],
+        "url": data["url"]
     }
 
 
 def get_papers(
-        keyword, npubs=30, year_start=None, year_end=None, venue=None,
+        keyword, n_pubs=30, year_start=None, year_end=None, venue=None,
         fields_of_study=None, publication_types=None, api_key=None):
     """
     Search for publications on Semantic Scholar using a keyword and optional filters.
 
     Args:
         - keyword (str): The keyword to search for in publication titles and abstracts.
-        - npubs (int): The maximum number of publications to return. Defaults to 30.
+        - n_pubs (int): The maximum number of publications to return. Defaults to 30.
         - year_start (int): The earliest year for which to retrieve publications.
         - year_end (int): The latest year for which to retrieve publications.
         - venue (str or list): The venue(s) where the publications were published.
@@ -54,14 +56,14 @@ def get_papers(
         >>> get_papers("machine learning", year_start=2021, year_end=2021, fields_of_study="Computer Science")
     """
     
-    if npubs > 100:
+    if n_pubs > 100:
         warnings.warn("The free API for Semantic Scholar cannot do more than " +
-                      f"100 requests at once, npubs has been set to 100.")
-        npubs = 100
+                      f"100 requests at once, n_pubs has been set to 100.")
+        n_pubs = 100
     
-    query = f"{URL_KEYWORD}query={keyword.replace(' ', '+')}&limit={npubs}"
+    query = f"{URL_KEYWORD}query={keyword.replace(' ', '+')}&limit={n_pubs}"
     # Set API key if we have it
-    if len(api_key):
+    if api_key is not None:
         headers = {"x-api-key": api_key}
     else:
         headers = None
@@ -113,11 +115,14 @@ def get_papers(
     warn_error(response)
     publications = response.json()
     pub_list = []
-    
+
+    # Special case when there are no publications found.
+    if publications["total"] == 0:
+        return pub_list
     # Query relevant information for each publication
     for pub in publications["data"]:
         query = f"{URL_DETAILS}{pub['paperId']}"
-        query += "?fields=year,authors,venue,abstract,citationStyles" 
+        query += "?fields=year,authors,venue,abstract,citationStyles,url" 
         resp = requests.get(query, headers=headers)
         warn_error(resp)
         data = resp.json()
@@ -194,3 +199,42 @@ def create_bibliography(publications):
 def warn_error(response):
     if response.status_code != 200:
         warnings.warn(f"Semantic Scholar error encountered: \n\t{response.json()['error']}")
+
+def get_top_journals(field: str, top5: bool =True) -> List[str]:
+    if field not in TOP_JOURNALS:
+        raise KeyError("Top journals for this field have not been compiled yet.")
+    if top5:
+        return TOP_JOURNALS[field][:5]
+    else:
+        return TOP_JOURNALS[field]
+
+# Top 5 are top 5, rest is simply good
+TOP_JOURNALS = {
+    "Economics": [
+        "American Economic Review",
+        "Econometrica",
+        "Journal of Political Economy",
+        "Quarterly Journal of Economics",
+        "Review of Economic Studies",
+        
+        "Economic Journal",
+        "European Economic Review",
+        "Journal of the European Economic Association",
+        "Review of Economic Studies",
+        "Review of Economics and Statistics",
+        "Annual Review of Economics",
+        "Journal of Economic Literature",
+        "Journal of Economic Perspectives",
+    ],
+
+    "Finance": [
+        "Journal of Finance",
+        "Journal of Financial Economics",
+        "Review of Financial Studies",
+        "Journal of Financial and Quantitative Analysis",
+        "Journal of Accounting and Economics",
+
+        "Journal of Banking and Finance",
+        "Quantitative Finance"
+    ]
+}
