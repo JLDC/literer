@@ -1,8 +1,10 @@
 import openai
 import re
-from .utils import get_content
 
-def single_review(publication, topic, tex_format=True, model="gpt-4-0314"):
+from .utils import get_content, get_gpt_model, make_journal_string
+
+
+def single_review(publication, topic, tex_format=True):
     """
     Generate a brief literature review for a given publication, using natural language prompts provided by OpenAI's GPT-3.
 
@@ -32,13 +34,13 @@ def single_review(publication, topic, tex_format=True, model="gpt-4-0314"):
         }
     ]
     response = openai.ChatCompletion.create(
-        model=model,
+        model=get_gpt_model(),
         messages=messages
     )
 
     return get_content(response)
 
-def summarize_papers(publications, topic, tex_format=False, model="gpt-4-0314"):
+def summarize_papers(publications, topic, tex_format=False):
     """
     Generate a full literature review for a set of publications, each with their own brief review.
 
@@ -77,13 +79,13 @@ def summarize_papers(publications, topic, tex_format=False, model="gpt-4-0314"):
         }
     ]
     response = openai.ChatCompletion.create(
-        model=model,
+        model=get_gpt_model(),
         messages=messages
     )
 
     return get_content(response)
 
-def get_keywords(topic, n_keywords, model="gpt-4-0314"):
+def get_keywords(topic, n_keywords):
     """
     Provide search queries for finding literature relevant to a given topic on Semantic Scholar, 
     and returns a list of n_keywords keywords as provided by the user.
@@ -115,7 +117,7 @@ def get_keywords(topic, n_keywords, model="gpt-4-0314"):
     ]
 
     response = openai.ChatCompletion.create(
-        model=model,
+        model=get_gpt_model(),
         messages=messages
     )
 
@@ -123,17 +125,11 @@ def get_keywords(topic, n_keywords, model="gpt-4-0314"):
 
 
 
-def judge_paper(publication, topic, target_journal, model="gpt-4-0314"):
-    if type(target_journal) is str:
-        journal_str = f"the following journal: '{target_journal}'"
-    elif type(target_journal) is list:
-        target_journal = "'" + "', '".join(target_journal) + "'"
-        journal_str = f"one of the following journals: {target_journal}"
-    else:
-        raise TypeError("'target_journal' must be either a str or list")
-    
+def judge_paper(publication, topic, target_journal):    
     if publication["abstract"] == "" or publication["abstract"] is None:
         return 0, "No abstract."
+    
+    journal_str = make_journal_string(target_journal)
     
     messages = [
         {
@@ -156,7 +152,7 @@ def judge_paper(publication, topic, target_journal, model="gpt-4-0314"):
     ]
 
     response = openai.ChatCompletion.create(
-        model=model,
+        model=get_gpt_model(),
         messages=messages
     )
 
