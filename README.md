@@ -2,12 +2,10 @@
 **literer** is a Python package that combines the Semantic Scholar and OpenAI APIs to create a literature review on specified topics. The package allows users to specify keywords related to their research interest and generate a summary of relevant research papers.
 
 ## Installation
-To install **literer**, clone this repository and install it in pip. Run the following commands:
+To install **literer**, install it using pip. Run the following commands:
 
 ```
-git clone https://github.com/JLDC/literer   # Clone the repository
-cd("literer")                               # Change the directory
-pip install .                               # Install the package with pip
+pip install literer                               # Install the package with pip
 
 # To uninstall the package again, just use
 # pip uninstall literer
@@ -102,10 +100,3 @@ lit_review = lit.summarize_papers(best_papers)
 > Lastly, the role of immigration restrictions as a form of active labor market policy is examined by Clemens et al. (2017), highlighting the limited and potentially perverse effects of such policies. This study underscores the importance of exploring a broader range of interventions and understanding their implications for labor market outcomes.
 >
 > Collectively, this literature provides a foundation for understanding the complexities of active labor market policies and their potential impacts on employment, wages, and welfare dependency. Future research should focus on disentangling the causal relationships between these policies and labor market outcomes, identifying optimal combinations of interventions, and understanding the long-term consequences of such policies on worker satisfaction and overall economic well-being.
-
-
-
-# Notes / Ideas
-+ [ ] Custom ranking by GPT instead of Semantic Scholar?
-+ [x] Use GPT to create the keywords (-> actually turned out meh)
-+ [ ] Find a way to implement timeouts for Semantic Scholar API
