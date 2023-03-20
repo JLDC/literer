@@ -1,7 +1,7 @@
 import openai
 from typing import List, Union
 
-from .utils import get_content, get_gpt_model, make_journal_string
+from .utils import get_content, get_openai_model, make_journal_string
 
 def give_feedback(paragraph: str, target_journal: Union[str, List[str]]) -> str:
     journal_str = make_journal_string(target_journal)
@@ -17,7 +17,7 @@ def give_feedback(paragraph: str, target_journal: Union[str, List[str]]) -> str:
     ]
 
     response = openai.ChatCompletion.create(
-        model=get_gpt_model(),
+        model=get_openai_model(),
         messages=messages
     )
     

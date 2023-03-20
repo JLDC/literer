@@ -1,4 +1,5 @@
 import requests
+from typing import List
 import warnings
 from .utils import clean_bibtex
 
@@ -31,14 +32,14 @@ def extract_paper_info(data):
 
 
 def get_papers(
-        keyword, npubs=30, year_start=None, year_end=None, venue=None,
+        keyword, n_pubs=30, year_start=None, year_end=None, venue=None,
         fields_of_study=None, publication_types=None, api_key=None):
     """
     Search for publications on Semantic Scholar using a keyword and optional filters.
 
     Args:
         - keyword (str): The keyword to search for in publication titles and abstracts.
-        - npubs (int): The maximum number of publications to return. Defaults to 30.
+        - n_pubs (int): The maximum number of publications to return. Defaults to 30.
         - year_start (int): The earliest year for which to retrieve publications.
         - year_end (int): The latest year for which to retrieve publications.
         - venue (str or list): The venue(s) where the publications were published.
@@ -55,12 +56,12 @@ def get_papers(
         >>> get_papers("machine learning", year_start=2021, year_end=2021, fields_of_study="Computer Science")
     """
     
-    if npubs > 100:
+    if n_pubs > 100:
         warnings.warn("The free API for Semantic Scholar cannot do more than " +
-                      f"100 requests at once, npubs has been set to 100.")
-        npubs = 100
+                      f"100 requests at once, n_pubs has been set to 100.")
+        n_pubs = 100
     
-    query = f"{URL_KEYWORD}query={keyword.replace(' ', '+')}&limit={npubs}"
+    query = f"{URL_KEYWORD}query={keyword.replace(' ', '+')}&limit={n_pubs}"
     # Set API key if we have it
     if api_key is not None:
         headers = {"x-api-key": api_key}
@@ -199,7 +200,7 @@ def warn_error(response):
     if response.status_code != 200:
         warnings.warn(f"Semantic Scholar error encountered: \n\t{response.json()['error']}")
 
-def get_top_journals(field, top5=True):
+def get_top_journals(field: str, top5: bool =True) -> List[str]:
     if field not in TOP_JOURNALS:
         raise KeyError("Top journals for this field have not been compiled yet.")
     if top5:

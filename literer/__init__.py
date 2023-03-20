@@ -4,8 +4,8 @@ literer
 A package that drops literature reviews in public places.
 """
 from literer.assistant import summarize_papers, single_review, get_keywords, judge_paper
-from literer.scholar import get_papers, create_bibliography
-from literer.utils import get_gpt_model, set_gpt_model
+from literer.scholar import get_papers, create_bibliography, get_top_journals
+from literer.utils import get_openai_model, set_openai_model
 from literer.reviewer import give_feedback, make_paragraphs
 
 __version__ = "0.1.1"
@@ -18,8 +18,9 @@ __all__ = [
     "judge_paper",
     "create_bibliography",
     "test_model",
-    "get_gpt_model",
-    "set_gpt_model",
+    "get_openai_model",
+    "set_openai_model",
     "give_feedback",
-    "make_paragraphs"    
+    "make_paragraphs",
+    "get_top_journals"  
 ]
