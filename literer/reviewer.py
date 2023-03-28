@@ -4,24 +4,6 @@ from typing import List, Tuple, Union
 
 from .utils import get_content, get_openai_model, make_journal_string, break_into_tokens
 
-def make_paragraphs(text: str, splitter: str ="\n\n") -> List[str]:
-    """
-    Split the given text into a list of paragraphs using the specified splitter.
-
-    Args:
-        text (str): The input text to split into paragraphs.
-        splitter (str, optional): The string that marks the end of a paragraph. Defaults to "\n\n".
-
-    Returns:
-        List[str]: A list of strings representing the individual paragraphs of the input text.
-
-    Example:
-        >>> text = "This is the first paragraph.\n\nThis is the second paragraph.\n\nAnd this is the third."
-        >>> make_paragraphs(text)
-        ['This is the first paragraph.', 'This is the second paragraph.', 'And this is the third.']
-    """
-    return text.split(splitter)
-
 def give_feedback(
         excerpt: str, target_journal: Union[str, List[str]], 
         input_tokens: int = 4000
