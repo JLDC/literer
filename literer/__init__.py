@@ -8,7 +8,7 @@ from literer.scholar import get_papers, create_bibliography, get_top_journals
 from literer.utils import get_openai_model, set_openai_model
 from literer.reviewer import give_feedback, make_paragraphs
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __author__ = "Jonathan Chassot"
 __all__ = [
     "get_keywords", 
@@ -21,6 +21,6 @@ __all__ = [
     "get_openai_model",
     "set_openai_model",
     "give_feedback",
-    "make_paragraphs",
+    "incorporate_feedback",
     "get_top_journals"  
 ]
