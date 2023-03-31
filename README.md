@@ -86,7 +86,7 @@ df_papers = pd.DataFrame({
 # Subset the papers to only keep the most relevant ones
 min_relevance = 7 # Minimum relevance score to keep a paper in the literature review
 best_papers = [p for i, p in enumerate(papers) if scores[i] >= min_relevance]
-lit_review = lit.summarize_papers(best_papers)
+lit_review = lit.summarize_papers(best_papers, topic=topic)
 ```
 
 
