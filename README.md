@@ -63,7 +63,7 @@ topic = "heterogeneity of treatment effects in active labor market policies"
 # target_journal can be either a list or a string of a single journal
 target_journal = ["American Economic Review", "Quarterly Journal of Economics"]
 for paper in papers:
-    score, reason = lit.judge_paper(paper=paper, topic=topic, target_journal=target_journal)
+    score, reason = lit.judge_paper(publication=paper, topic=topic, target_journal=target_journal)
     scores.append(score)
     reasons.append(reason)
 
