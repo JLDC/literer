@@ -1,4 +1,5 @@
 import numpy as np
+import openai
 import re
 import tiktoken
 from typing import List, Union

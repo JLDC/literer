@@ -8,7 +8,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="literer",
-    version="0.1.2",
+    version="0.1.4",
     license="MIT",
     description="literer is a package that combines the Semantic Scholar and OpenAI APIs to create automated literature reviews",
     long_description=long_description,
