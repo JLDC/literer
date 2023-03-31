@@ -5,7 +5,8 @@
 To install **literer**, install it using pip. Run the following commands:
 
 ```
-pip install literer                               # Install the package with pip
+ # Install the package with pip
+pip install literer
 
 # To uninstall the package again, just use
 # pip uninstall literer
@@ -63,7 +64,7 @@ topic = "heterogeneity of treatment effects in active labor market policies"
 # target_journal can be either a list or a string of a single journal
 target_journal = ["American Economic Review", "Quarterly Journal of Economics"]
 for paper in papers:
-    score, reason = lit.judge_paper(paper=paper, topic=topic, target_journal=target_journal)
+    score, reason = lit.judge_paper(publication=paper, topic=topic, target_journal=target_journal)
     scores.append(score)
     reasons.append(reason)
 
@@ -73,8 +74,8 @@ import pandas as pd
 
 df_papers = pd.DataFrame({
     "authors": [", ".join(p["authors"]) for p in papers],
-    "year": [p["year"] for p in all_papers],
-    "title": [p["title"] for p in all_papers],
+    "year": [p["year"] for p in papers],
+    "title": [p["title"] for p in papers],
     "relevance_score": scores,
     "relevance_reason": reasons 
 })
