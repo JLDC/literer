@@ -5,7 +5,8 @@
 To install **literer**, install it using pip. Run the following commands:
 
 ```
-pip install literer                               # Install the package with pip
+ # Install the package with pip
+pip install literer
 
 # To uninstall the package again, just use
 # pip uninstall literer
@@ -73,8 +74,8 @@ import pandas as pd
 
 df_papers = pd.DataFrame({
     "authors": [", ".join(p["authors"]) for p in papers],
-    "year": [p["year"] for p in all_papers],
-    "title": [p["title"] for p in all_papers],
+    "year": [p["year"] for p in papers],
+    "title": [p["title"] for p in papers],
     "relevance_score": scores,
     "relevance_reason": reasons 
 })
